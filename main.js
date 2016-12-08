@@ -15,17 +15,23 @@ function random(min,max) {
   return num;
 }
 
-function Ball() {
+function Shape() {
   this.x = random(0,width);
   this.y = random(0,height);
-  // x and y coordinates — each ball is initially given a random horizontal and vertical coordinate where it will start on the screen. This can range between 0 (top left hand corner) to the width and height of the browser viewport (bottom right hand corner).
   this.velX = random(-7,7);
   this.velY = random(-7,7);
-  // horizontal and vertical velocity (velX and velY) — each ball is given random values to represent its velocity; in real terms these values will be regularly added to the x/y coordinate values when we start to animate the balls, to move them by this much on each frame.
+  this.exists = true;
+}
+
+function Ball(x, y, velX, velY, exists) {
+  Shape.call(this, x, y, velX, velY, exists);
+
   this.color = 'rgb(' + random(0,255) + ',' + random(0,255) + ',' + random(0,255) +')';
   this.size = random(10,20);
-  // size — each ball gets a random size, a radius of between 10 and 20 pixels.
 }
+
+Ball.prototype = Object.create(Shape.prototype);
+Ball.prototype.constructor = Ball;
 
 Ball.prototype.draw = function() {
   ctx.beginPath(); // we use beginPath() to state that we want to draw a shape on the paper
@@ -99,6 +105,7 @@ Ball.prototype.collisionDetect = function() {
     }
   }
 }
+
 
 var balls = [];
 
