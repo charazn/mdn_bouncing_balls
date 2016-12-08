@@ -37,3 +37,33 @@ Ball.prototype.draw = function() {
   // The last two parameters specify the start and end number of degrees round the circle that the arc is drawn between. Here we specify 0 degrees, and 2 * PI, which is the equivalent of 360 degrees in radians (annoyingly, you have to specify this in radians). That gives us a complete circle. If you had specified only 1 * PI, you'd get a semi-circle (180 degrees).
   ctx.fill(); // we use the fill() method, which basically states "finish drawing the path we started with beginPath(), and fill the area it takes up with the color we specified earlier in fillStyle."
 }
+
+Ball.prototype.update = function() {
+  if((this.x + this.size) >= width) {
+    this.velX = -(this.velX);
+  }
+  // Checking to see whether the x coordinate is greater than the width of the canvas (the ball is going off the right hand edge).
+
+  if((this.x - this.size) <= 0) {
+    this.velX = -(this.velX);
+  }
+  // Checking to see whether the x coordinate is smaller than 0 (the ball is going off the left hand edge).
+
+  if((this.y + this.size) >= height) {
+    this.velY = -(this.velY);
+  }
+  // Checking to see whether the y coordinate is greater than the height of the canvas (the ball is going off the bottom edge).
+
+  if((this.y - this.size) <= 0) {
+    this.velY = -(this.velY);
+  }
+  // Checking to see whether the y coordinate is smaller than 0 (the ball is going off the top edge).
+
+  // The first four parts of the function check whether the ball has reached the edge of the canvas. If it has, we reverse the polarity of the relevant velocity to make the ball travel in the opposite direction. So for example, if the ball was traveling upwards (positive velX), then the horizontal velocity is changed so that it starts to travel downwards instead.
+
+  // In each case, we are including the size of the ball in the calculation because the x/y coordinates are in the center of the ball, but we want the edge of the ball to bounce off the perimeter — we don't want the ball to go halfway off the screen before it starts to bounce back.
+
+  this.x += this.velX;
+  this.y += this.velY;
+  // The last two lines add the velX value to the x coordinate, and the velY value to the y coordinate — the ball is in effect moved each time this method is called.
+}
