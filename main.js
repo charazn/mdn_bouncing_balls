@@ -57,6 +57,14 @@ Ball.prototype.draw = function() {
   ctx.fill(); // we use the fill() method, which basically states "finish drawing the path we started with beginPath(), and fill the area it takes up with the color we specified earlier in fillStyle."
 }
 
+EvilCircle.prototype.draw = function() {
+  ctx.beginPath();
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = this.color;
+  ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+  ctx.stroke();
+}
+
 Ball.prototype.update = function() {
   if((this.x + this.size) >= width) {
     this.velX = -(this.velX);
