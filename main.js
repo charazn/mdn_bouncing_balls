@@ -164,6 +164,20 @@ Ball.prototype.collisionDetect = function() {
   }
 }
 
+EvilCircle.prototype.collisionDetect = function() {
+  for(j = 0; j < balls.length; j++) {
+    if(balls[j].exists === true) {
+      var dx = this.x - balls[j].x;
+      var dy = this.y - balls[j].y;
+      var distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < this.size + balls[j].size) {
+        balls[j].exists = false;
+      }
+    }
+  }
+}
+
 
 var balls = [];
 
