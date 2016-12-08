@@ -33,6 +33,19 @@ function Ball(x, y, velX, velY, exists) {
 Ball.prototype = Object.create(Shape.prototype);
 Ball.prototype.constructor = Ball;
 
+function EvilCircle(x, y, exists) {
+  Shape.call(this, x, y, exists);
+
+  this.color = 'white';
+  this.size = 10;
+  this.velX = 20;
+  this.velY = 20;
+}
+
+EvilCircle.prototype = Object.create(Shape.prototype);
+EvilCircle.prototype.constructor = EvilCircle;
+
+
 Ball.prototype.draw = function() {
   ctx.beginPath(); // we use beginPath() to state that we want to draw a shape on the paper
   ctx.fillStyle = this.color; // we use fillStyle to define what color we want the shape to be — we set it to our ball's color property.
