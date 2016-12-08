@@ -95,6 +95,24 @@ Ball.prototype.update = function() {
   // The last two lines add the velX value to the x coordinate, and the velY value to the y coordinate — the ball is in effect moved each time this method is called.
 }
 
+EvilCircle.prototype.checkBounds = function() {
+  if((this.x + this.size) >= width) {
+    this.x = -(this.size);
+  }
+
+  if((this.x - this.size) <= 0) {
+    this.x = this.size;
+  }
+
+  if((this.y + this.size) >= height) {
+    this.y = -(this.size);
+  }
+
+  if((this.y - this.size) <= 0) {
+    this.y = this.size;
+  }
+}
+
 Ball.prototype.collisionDetect = function() {
   for(j = 0; j < balls.length; j++) {
     // For each ball, we need to check every other ball to see if it has collided with the current ball. To the end, we open up another for loop to loop through all the balls in the balls[] array.
