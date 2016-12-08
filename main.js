@@ -8,6 +8,10 @@ var ctx = canvas.getContext('2d');
 var width = canvas.width = window.innerWidth;
 var height = canvas.height = window.innerHeight;
 
+var para = document.querySelector('p');
+var balls = [];
+var count = 0;
+
 // function to generate random number
 
 function random(min,max) {
@@ -23,6 +27,8 @@ function Shape() {
   this.exists = true;
 }
 
+// Inherit Ball from Shape
+
 function Ball(x, y, velX, velY, exists) {
   Shape.call(this, x, y, velX, velY, exists);
 
@@ -33,18 +39,8 @@ function Ball(x, y, velX, velY, exists) {
 Ball.prototype = Object.create(Shape.prototype);
 Ball.prototype.constructor = Ball;
 
-function EvilCircle(x, y, exists) {
-  Shape.call(this, x, y, exists);
 
-  this.color = 'white';
-  this.size = 10;
-  this.velX = 20;
-  this.velY = 20;
-}
-
-EvilCircle.prototype = Object.create(Shape.prototype);
-EvilCircle.prototype.constructor = EvilCircle;
-
+// Ball methods definition
 
 Ball.prototype.draw = function() {
   ctx.beginPath(); // we use beginPath() to state that we want to draw a shape on the paper
@@ -55,14 +51,6 @@ Ball.prototype.draw = function() {
   // The radius of our arc — we are specifying our ball's size property.
   // The last two parameters specify the start and end number of degrees round the circle that the arc is drawn between. Here we specify 0 degrees, and 2 * PI, which is the equivalent of 360 degrees in radians (annoyingly, you have to specify this in radians). That gives us a complete circle. If you had specified only 1 * PI, you'd get a semi-circle (180 degrees).
   ctx.fill(); // we use the fill() method, which basically states "finish drawing the path we started with beginPath(), and fill the area it takes up with the color we specified earlier in fillStyle."
-}
-
-EvilCircle.prototype.draw = function() {
-  ctx.beginPath();
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = this.color;
-  ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
-  ctx.stroke();
 }
 
 Ball.prototype.update = function() {
@@ -93,43 +81,6 @@ Ball.prototype.update = function() {
   this.x += this.velX;
   this.y += this.velY;
   // The last two lines add the velX value to the x coordinate, and the velY value to the y coordinate — the ball is in effect moved each time this method is called.
-}
-
-EvilCircle.prototype.checkBounds = function() {
-  if((this.x + this.size) >= width) {
-    this.x = -(this.size);
-  }
-
-  if((this.x - this.size) <= 0) {
-    this.x = this.size;
-  }
-
-  if((this.y + this.size) >= height) {
-    this.y = -(this.size);
-  }
-
-  if((this.y - this.size) <= 0) {
-    this.y = this.size;
-  }
-}
-
-EvilCircle.prototype.setControls = function() {
-  var _this = this;
-  // this is a variable that is automatically set for you when a function is invoked. The value it’s given depends on how a function is invoked. The three ways most people use them; either when a function is called as a method, or on it’s own, or as an event handler. Depending on how a function is invoked, this is set differently:
-  // Can you tell us why we've had to set var _this = this; in the position it is in? It is something to do with function scope.
-  // If we use this inside the event handler, this would refer to the global (window) scope, and not to the EvilCircle object.
-
-  window.onkeydown = function(e) {
-    if(e.keyCode === 37) {
-      _this.x -= _this.velX;
-    } else if(e.keyCode === 39) {
-      _this.x += _this.velX;
-    } else if(e.keyCode === 38) {
-      _this.y -= _this.velY;
-    } else if(e.keyCode === 40) {
-      _this.y += _this.velY;
-    }
-  }
 }
 
 Ball.prototype.collisionDetect = function() {
@@ -164,24 +115,89 @@ Ball.prototype.collisionDetect = function() {
   }
 }
 
+
+// Define EvilCircle constructor, inherit from Shape
+
+function EvilCircle(x, y, exists) {
+  Shape.call(this, x, y, exists);
+
+  this.color = 'white';
+  this.size = 20;
+  this.velX = 20;
+  this.velY = 20;
+}
+
+EvilCircle.prototype = Object.create(Shape.prototype);
+EvilCircle.prototype.constructor = EvilCircle;
+
+// EvilCircle methods definition
+
+EvilCircle.prototype.draw = function() {
+  ctx.beginPath();
+  ctx.lineWidth = 5;
+  ctx.strokeStyle = this.color;
+  ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+  ctx.stroke();
+}
+
+EvilCircle.prototype.checkBounds = function() {
+  if((this.x + this.size) >= width) {
+    this.x -= this.size;
+  }
+
+  if((this.x - this.size) <= 0) {
+    this.x += this.size;
+  }
+
+  if((this.y + this.size) >= height) {
+    this.y -= this.size;
+  }
+
+  if((this.y - this.size) <= 0) {
+    this.y += this.size;
+  }
+}
+
+EvilCircle.prototype.setControls = function() {
+  var _this = this;
+  // this is a variable that is automatically set for you when a function is invoked. The value it’s given depends on how a function is invoked. The three ways most people use them; either when a function is called as a method, or on it’s own, or as an event handler. Depending on how a function is invoked, this is set differently:
+  // Can you tell us why we've had to set var _this = this; in the position it is in? It is something to do with function scope.
+  // If we use this inside the event handler, this would refer to the global (window) scope, and not to the EvilCircle object.
+  // See http://javascriptplayground.com/blog/2012/04/javascript-variable-scope-this/
+
+  window.onkeydown = function(e) {
+    if(e.keyCode === 37) {
+      _this.x -= _this.velX;
+    } else if(e.keyCode === 39) {
+      _this.x += _this.velX;
+    } else if(e.keyCode === 38) {
+      _this.y -= _this.velY;
+    } else if(e.keyCode === 40) {
+      _this.y += _this.velY;
+    }
+  }
+}
+
 EvilCircle.prototype.collisionDetect = function() {
   for(j = 0; j < balls.length; j++) {
-    if(balls[j].exists === true) {
+    if(balls[j].exists) {
       var dx = this.x - balls[j].x;
       var dy = this.y - balls[j].y;
       var distance = Math.sqrt(dx * dx + dy * dy);
 
-      if (distance < this.size + balls[j].size) {
+      if(distance < this.size + balls[j].size) {
         balls[j].exists = false;
+        count -= 1;
+        para.textContent = 'Ball count: ' + count;
+        if (count === 0) {
+          para.textContent = "YOU WIN!";
+        }
       }
     }
   }
 }
 
-
-var balls = [];
-var evilC = new EvilCircle(600,300,true);
-evilC.setControls();
+// Main game logic
 
 function loop() {
   ctx.fillStyle = 'rgba(0,0,0,0.25)';
@@ -191,6 +207,8 @@ function loop() {
   while(balls.length < 25) {
     var ball = new Ball();
     balls.push(ball);
+    count += 1;
+    para.textContent = 'Ball count: ' + count;
   }
 
   for(i = 0; i < balls.length; i++) {
@@ -209,5 +227,12 @@ function loop() {
   requestAnimationFrame(loop);
   // Runs the function again using the requestAnimationFrame() method — when this method is constantly run and passed the same function name, it will run that function a set number of times per second to create a smooth animation. This is generally done recursively — which means that the function is calling itself every time it runs, so it will run over and over again.
 }
+
+// Draw EvilCircle
+
+var evilC = new EvilCircle(width/2, height/2 ,true);
+evilC.setControls();
+
+// Run game
 
 loop();
