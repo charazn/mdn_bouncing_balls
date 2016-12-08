@@ -113,6 +113,25 @@ EvilCircle.prototype.checkBounds = function() {
   }
 }
 
+EvilCircle.prototype.setControls = function() {
+  var _this = this;
+  // this is a variable that is automatically set for you when a function is invoked. The value it’s given depends on how a function is invoked. The three ways most people use them; either when a function is called as a method, or on it’s own, or as an event handler. Depending on how a function is invoked, this is set differently:
+  // Can you tell us why we've had to set var _this = this; in the position it is in? It is something to do with function scope.
+  // If we use this inside the event handler, this would refer to the global (window) scope, and not to the EvilCircle object.
+
+  window.onkeydown = function(e) {
+    if(e.keyCode === 37) {
+      _this.x -= _this.velX;
+    } else if(e.keyCode === 39) {
+      _this.x += _this.velX;
+    } else if(e.keyCode === 38) {
+      _this.y -= _this.velY;
+    } else if(e.keyCode === 40) {
+      _this.y += _this.velY;
+    }
+  }
+}
+
 Ball.prototype.collisionDetect = function() {
   for(j = 0; j < balls.length; j++) {
     // For each ball, we need to check every other ball to see if it has collided with the current ball. To the end, we open up another for loop to loop through all the balls in the balls[] array.
