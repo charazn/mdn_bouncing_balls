@@ -26,3 +26,14 @@ function Ball() {
   this.size = random(10,20);
   // size — each ball gets a random size, a radius of between 10 and 20 pixels.
 }
+
+Ball.prototype.draw = function() {
+  ctx.beginPath(); // we use beginPath() to state that we want to draw a shape on the paper
+  ctx.fillStyle = this.color; // we use fillStyle to define what color we want the shape to be — we set it to our ball's color property.
+  ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+  // Next, we use the arc() method to trace an arc shape on the paper. Its parameters are:
+  // The x and y position of the arc's center — we are specifying our ball's x and y properties.
+  // The radius of our arc — we are specifying our ball's size property.
+  // The last two parameters specify the start and end number of degrees round the circle that the arc is drawn between. Here we specify 0 degrees, and 2 * PI, which is the equivalent of 360 degrees in radians (annoyingly, you have to specify this in radians). That gives us a complete circle. If you had specified only 1 * PI, you'd get a semi-circle (180 degrees).
+  ctx.fill(); // we use the fill() method, which basically states "finish drawing the path we started with beginPath(), and fill the area it takes up with the color we specified earlier in fillStyle."
+}
