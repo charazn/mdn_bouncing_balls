@@ -68,6 +68,38 @@ Ball.prototype.update = function() {
   // The last two lines add the velX value to the x coordinate, and the velY value to the y coordinate — the ball is in effect moved each time this method is called.
 }
 
+Ball.prototype.collisionDetect = function() {
+  for(j = 0; j < balls.length; j++) {
+    // For each ball, we need to check every other ball to see if it has collided with the current ball. To the end, we open up another for loop to loop through all the balls in the balls[] array.
+    if( (!(this.x === balls[j].x && this.y === balls[j].y && this.velX === balls[j].velX && this.velY === balls[j].velY)) ) {
+      // Immediately inside our for loop, we use an if statement to check whether the current ball being looped through is the same ball as the one we are currently checking. We don't want to check whether a ball has collided with itself! To do this, we check whether the current ball's x/y coordinates and current velocity are the same as the loop ball. We then use ! to negate the check, so that the code inside the the if statement only runs if they are not the same.
+      var dx = this.x - balls[j].x;
+      var dy = this.y - balls[j].y;
+      var distance = Math.sqrt(dx * dx + dy * dy);
+      // We then use a common algorithm to check the collision of two circles. We are basically checking whether any of the two circle's areas overlap. This is explained further in 2D collision detection.
+      // https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+      // Circle Collision
+      // Another simple shape for collision detection is between two circles. This algorithm works by taking the centre points of the two circles and ensuring the distance between the centre points are less than the two radii added together.
+      //
+      // var circle1 = {radius: 20, x: 5, y: 5};
+      // var circle2 = {radius: 12, x: 10, y: 5};
+      //
+      // var dx = circle1.x - circle2.x;
+      // var dy = circle1.y - circle2.y;
+      // var distance = Math.sqrt(dx * dx + dy * dy);
+      //
+      // if (distance < circle1.radius + circle2.radius) {
+      //     // collision detected!
+      // }
+
+      if (distance < this.size + balls[j].size) {
+        balls[j].color = this.color = 'rgb(' + random(0,255) + ',' + random(0,255) + ',' + random(0,255) +')';
+      }
+      // If a collision is detected, the code inside the inner if statement is run. In this case we are just setting the color property of both the circles to a new random color. We could have done something far more complex, like get the balls to bounce off each other realistically, but that would have been far more complex to implement. For such physics simulations, developers tend to use a games or physics library such as PhysicsJS, matter.js, Phaser, etc.
+    }
+  }
+}
+
 var balls = [];
 
 function loop() {
@@ -83,6 +115,7 @@ function loop() {
   for(i = 0; i < balls.length; i++) {
     balls[i].draw();
     balls[i].update();
+    balls[i].collisionDetect();
   }
   // loops through all the balls in the balls array, and runs each ball's draw() and update() function to draw each one on the screen, then do the necessary updates to position and velocity in time for the next frame.
 
