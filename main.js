@@ -180,6 +180,8 @@ EvilCircle.prototype.collisionDetect = function() {
 
 
 var balls = [];
+var evilC = new EvilCircle(600,300,true);
+evilC.setControls();
 
 function loop() {
   ctx.fillStyle = 'rgba(0,0,0,0.25)';
@@ -192,11 +194,17 @@ function loop() {
   }
 
   for(i = 0; i < balls.length; i++) {
-    balls[i].draw();
-    balls[i].update();
-    balls[i].collisionDetect();
+    if(balls[i].exists === true) {
+      balls[i].draw();
+      balls[i].update();
+      balls[i].collisionDetect();
+    }
   }
   // loops through all the balls in the balls array, and runs each ball's draw() and update() function to draw each one on the screen, then do the necessary updates to position and velocity in time for the next frame.
+
+  evilC.draw();
+  evilC.checkBounds();
+  evilC.collisionDetect();
 
   requestAnimationFrame(loop);
   // Runs the function again using the requestAnimationFrame() method — when this method is constantly run and passed the same function name, it will run that function a set number of times per second to create a smooth animation. This is generally done recursively — which means that the function is calling itself every time it runs, so it will run over and over again.
